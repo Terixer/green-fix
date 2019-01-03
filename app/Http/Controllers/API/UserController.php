@@ -11,7 +11,8 @@ use Validator;
 class UserController extends Controller
 {
     const SUCCESS_STATUS = 200;
-    const ERROR_STATUS = 401;
+    const UNAUTHORISED_STATUS = 401;
+    const USER_ERROR_STATUS = 400;
     const TOKEN_NAME = 'GreenFixApp';
 
 
@@ -25,7 +26,7 @@ class UserController extends Controller
             $success['token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
             return response()->json(['success' => $success], self::SUCCESS_STATUS);
         } else {
-            return response()->json(['error' => 'Unauthorised'], self::ERROR_STATUS);
+            return response()->json(['error' => 'Unauthorised'], self::UNAUTHORISED_STATUS);
         }
     }
 
@@ -43,11 +44,16 @@ class UserController extends Controller
             'c_password' => 'required|same:password',
         ]);
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], self::ERROR_STATUS);
+            return response()->json(['error' => $validator->errors()], self::UNAUTHORISED_STATUS);
         }
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
+        try{
+            $user = User::create($input);
+        }
+        catch (\Exception $exception){
+            return response()->json(['error' => 'Error with registration'], self::USER_ERROR_STATUS);
+        }
         $success['token'] = $user->createToken(self::TOKEN_NAME)->accessToken;
         $success['name'] = $user->name;
         return response()->json(['success' => $success], self::SUCCESS_STATUS);
