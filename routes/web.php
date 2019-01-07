@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/advertisements', 'AdvertisementController@index')->name('advertisements');
+Route::get('/advertisements/create', 'AdvertisementController@create')->name('createAdvertisement');
+Route::post('/advertisements/store', 'AdvertisementController@store')->name('storeAdvertisement');
+
