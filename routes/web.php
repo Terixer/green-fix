@@ -17,7 +17,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+
 Route::get('/advertisements', 'AdvertisementController@index')->name('advertisements');
 Route::get('/advertisements/create', 'AdvertisementController@create')->name('createAdvertisement');
+Route::get('/advertisements/{id}', 'AdvertisementController@show')->name('showAdvertisement');
 Route::post('/advertisements/store', 'AdvertisementController@store')->name('storeAdvertisement');
 
+//dump(Route::getRoutes());

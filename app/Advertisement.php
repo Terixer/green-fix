@@ -8,7 +8,10 @@ class Advertisement extends Model
 {
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'phone',
+        'email',
+        'user_id'
     ];
 
     protected $attributes = [

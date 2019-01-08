@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Picture extends Model
 {
     protected $fillable = [
-        'name',
-        'isMain'
+        'advertisement_id',
+        'filename'
     ];
 
 }

@@ -25,22 +25,21 @@
         </div>
     </header>
     <div class="container-fluid mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Dashboard</div>
-
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        You are logged in!
+        <div class="card-columns">
+            @foreach ($advertisements as $advertisement)
+                <a class="text-dark" href="{{route('showAdvertisement', ['id' => $advertisement->id])}}">
+                    <div class="card">
+                        <img class="card-img-top "
+                             src="{{asset('storage/pictures/'.basename($advertisement->pictures[0]->filename))}}"
+                             alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{$advertisement->title}}</h5>
+                            <p class="card-text">{{$advertisement->description}}</p>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </a>
+
+            @endforeach
         </div>
     </div>
 @endsection
