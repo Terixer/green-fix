@@ -6,7 +6,7 @@ use App\Advertisement;
 use App\Picture;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Input;
 
 class AdvertisementController extends Controller
 {
@@ -27,30 +27,59 @@ class AdvertisementController extends Controller
      */
     public function index()
     {
-        $advertisements = Advertisement::where('isAccepted', 1)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        if (!Input::get('search')) {
+            $advertisements = Advertisement::where('is_active', 1)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }else{
+            $advertisements = Advertisement::where('title', 'like', '%' . Input::get('search') . '%')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
 
         return view('advertisement.index', [
             'advertisements' => $advertisements
         ]);
     }
 
+
     /**
-     * Show the form to create a new advertisement.
-     *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
         return view('advertisement.create');
     }
 
+
     /**
-     * Store a new advertisement.
-     *
-     * @param  Request $request
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function deactive(Request $request)
+    {
+        $advertisement = Advertisement::where('id', $request->id)->first();
+        $advertisement->is_active = false;
+        $advertisement->save();
+        return redirect()->back()->with('status', ['Status of the advertisement has been correctly updated']);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function active(Request $request)
+    {
+        $advertisement = Advertisement::where('id', $request->id)->first();
+        $advertisement->is_active = true;
+        $advertisement->save();
+        return redirect()->back()->with('status', ['Status of the advertisement has been correctly updated']);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -81,13 +110,20 @@ class AdvertisementController extends Controller
     }
 
 
-    public function show($id){
-        $advertisement = Advertisement::where('id',$id)->first();
-        $user = User::where('id',$advertisement->user_id)->first();
+    /**
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $advertisement = Advertisement::where('id', $id)->first();
+        $user = User::where('id', $advertisement->user_id)->first();
 
-        return view('advertisement.show',[
+        return view('advertisement.show', [
             'advertisement' => $advertisement,
             'user' => $user
         ]);
     }
+
+
 }

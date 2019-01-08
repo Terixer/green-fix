@@ -22,5 +22,9 @@ Route::get('/advertisements', 'AdvertisementController@index')->name('advertisem
 Route::get('/advertisements/create', 'AdvertisementController@create')->name('createAdvertisement');
 Route::get('/advertisements/{id}', 'AdvertisementController@show')->name('showAdvertisement');
 Route::post('/advertisements/store', 'AdvertisementController@store')->name('storeAdvertisement');
+Route::post('/advertisements/deactive', 'AdvertisementController@deactive')->name('deactiveAdvertisement');
+Route::post('/advertisements/active', 'AdvertisementController@active')->name('activeAdvertisement');
+
+Route::get('/userPanel/advertisements', 'UserPanelController@showAdvertisements')->name('userPanelShowAdvertisements');
 
 //dump(Route::getRoutes());

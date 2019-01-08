@@ -11,14 +11,23 @@ class Advertisement extends Model
         'description',
         'phone',
         'email',
-        'user_id'
+        'user_id',
+        'is_active'
     ];
 
     protected $attributes = [
-        'isAccepted' => true,
+        'is_active' => true,
     ];
 
     public function pictures(){
         return $this->hasMany('App\Picture');
+    }
+
+    public static function showAllAdvertisementsBelongTo($user){
+            return Advertisement::where('user_id',$user->id)
+                ->orderBy('is_active', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
     }
 }

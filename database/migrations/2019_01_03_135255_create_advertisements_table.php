@@ -17,7 +17,7 @@ class CreateAdvertisementsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->longText('description');
-            $table->boolean('isAccepted');
+            $table->boolean('is_active');
             $table->string('phone');
             $table->string('email');
             $table->integer('user_id')->unsigned();
